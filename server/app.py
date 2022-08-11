@@ -12,7 +12,7 @@ app = flask.Flask(__name__)
 
 
 cred = credentials.Certificate(
-    "D:\\Projects\\sample_flask\\edge-detector-de11d6a787ef.json")
+    "<firebase credentials>")
 initialize_app(
     cred, {'storageBucket': 'edge-detector.appspot.com'})
 
