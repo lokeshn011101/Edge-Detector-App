@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeNetworkCall(Request request) {
         findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-        client.newCall(request).enqueue(new Callback() {
+        new Thread(() -> client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(Call call, final Response response) {
                 runOnUiThread(() -> {
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Failed to Connect to Server", Toast.LENGTH_SHORT).show();
                 });
             }
-        });
+        })).start();
     }
 
     private void sendUrlToServer(String url) {
