@@ -16,8 +16,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,24 +46,18 @@ public class MainActivity extends AppCompatActivity {
     private final OkHttpClient client = new OkHttpClient();
     private final ActivityResultLauncher<Intent> uploadImageFromCameraActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        sendImageToServer(currentPhotoPath);
-                    }
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    sendImageToServer(currentPhotoPath);
                 }
             });
     private final ActivityResultLauncher<Intent> uploadImageFromGalleryActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        String filePath = getPath(data);
-                        sendImageToServer(filePath);
-                    }
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    String filePath = getPath(data);
+                    sendImageToServer(filePath);
                 }
             });
 
@@ -178,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (photoFile != null) {
                         Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                                BuildConfig.APPLICATION_ID + ".provider",
+                                "com.example.edgedetector.provider",
                                 photoFile);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         uploadImageFromCameraActivityResultLauncher.launch(takePictureIntent);
