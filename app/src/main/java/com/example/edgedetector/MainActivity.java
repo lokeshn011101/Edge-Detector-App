@@ -107,15 +107,12 @@ public class MainActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(Call call, final Response response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        findViewById(R.id.progressBar).setVisibility(View.GONE);
-                        try {
-                            Toast.makeText(getApplicationContext(), response.body().string(), Toast.LENGTH_SHORT).show();
-                        } catch (IOException e) {
-                            Log.d("App", e.toString());
-                        }
+                runOnUiThread(() -> {
+                    findViewById(R.id.progressBar).setVisibility(View.GONE);
+                    try {
+                        Toast.makeText(getApplicationContext(), response.body().string(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        Log.d("App", e.toString());
                     }
                 });
             }
@@ -123,12 +120,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 call.cancel();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        findViewById(R.id.progressBar).setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "Failed to Connect to Server", Toast.LENGTH_SHORT).show();
-                    }
+                runOnUiThread(() -> {
+                    findViewById(R.id.progressBar).setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), "Failed to Connect to Server", Toast.LENGTH_SHORT).show();
                 });
             }
         });
@@ -147,46 +141,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button mGalleryUploadButton = findViewById(R.id.gallery_upload);
-        mGalleryUploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent selectImageIntent = new Intent();
-                selectImageIntent.setType("image/*");
-                selectImageIntent.setAction(Intent.ACTION_GET_CONTENT);
-                uploadImageFromGalleryActivityResultLauncher.launch(selectImageIntent);
-            }
+        mGalleryUploadButton.setOnClickListener(view -> {
+            Intent selectImageIntent = new Intent();
+            selectImageIntent.setType("image/*");
+            selectImageIntent.setAction(Intent.ACTION_GET_CONTENT);
+            uploadImageFromGalleryActivityResultLauncher.launch(selectImageIntent);
         });
         Button mCameraUploadButton = findViewById(R.id.camera_upload);
-        mCameraUploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        Log.e("App", ex.toString());
-                    }
-                    if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
-                                "com.example.edgedetector.provider",
-                                photoFile);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        uploadImageFromCameraActivityResultLauncher.launch(takePictureIntent);
-                    }
+        mCameraUploadButton.setOnClickListener(view -> {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    Log.e("App", ex.toString());
+                }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                            "com.example.edgedetector.provider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    uploadImageFromCameraActivityResultLauncher.launch(takePictureIntent);
                 }
             }
         });
         Button mUrlUploadButton = findViewById(R.id.url_upload);
-        mUrlUploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView urlTextView = (TextView) findViewById(R.id.url_text_view);
-                String url = urlTextView.getText().toString();
-                if (validURL(url)) {
-                    sendUrlToServer(url);
-                }
+        mUrlUploadButton.setOnClickListener(view -> {
+            TextView urlTextView = (TextView) findViewById(R.id.url_text_view);
+            String url = urlTextView.getText().toString();
+            if (validURL(url)) {
+                sendUrlToServer(url);
             }
         });
     }
