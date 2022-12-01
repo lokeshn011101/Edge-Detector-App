@@ -40,8 +40,8 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String DETECT_EDGES_FROM_PHONE_SERVER_URL = "http://192.168.29.74:5000/detect_edges_image_from_phone";
-    private static final String DETECT_EDGES_FROM_URL_SERVER_URL = "http://192.168.29.74:5000/detect_edges_image_from_url";
+    private static final String DETECT_EDGES_FROM_PHONE_SERVER_URL = "http://192.168.56.1:5000/detect_edges_image_from_phone";
+    private static final String DETECT_EDGES_FROM_URL_SERVER_URL = "http://192.168.56.1:5000/detect_edges_image_from_url";
     private String currentPhotoPath = "";
     private final OkHttpClient client = new OkHttpClient();
     private final ActivityResultLauncher<Intent> uploadImageFromCameraActivityResultLauncher = registerForActivityResult(
@@ -188,5 +188,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean validURL(String url) {
         Pattern urlPattern = Pattern.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)");
         return urlPattern.matcher(url).matches() && (url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png"));
+    }
+
+    public void viewEdgeDetectedImages(View view) {
+        Intent scrollingIntent = new Intent(MainActivity.this, ScrollingActivity.class);
+        startActivity(scrollingIntent);
     }
 }
