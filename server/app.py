@@ -1,5 +1,7 @@
 from time import time
+from flask import Response
 import flask
+import json
 import cv2
 from PIL import Image
 import numpy as np
@@ -49,6 +51,22 @@ def upload_images_to_storage(normal_image, edge_detected_image, filename):
     delete_file(filename2)
 
 
+@app.route('/get_all_images',methods=['GET'])
+def fn():
+    bucket = storage.bucket()
+    blob_iter = bucket.list_blobs(delimiter='/')
+    result = list()
+    for res in blob_iter:
+        if res.name[0] == '1':
+            continue
+        url = "https://firebasestorage.googleapis.com/v0/b/edge-detector.appspot.com/o/" + res.name + "?alt=media"
+        dic = {
+            "name" : res.name,
+            "url" : url
+        }
+        result.append(dic)
+    return Response(json.dumps(result),  mimetype='application/json')
+
 @app.route('/detect_edges_image_from_phone', methods=['POST'])
 def detect_edges_of_image_from_phone():
     image_file = flask.request.files['image']
@@ -76,4 +94,4 @@ def detect_edges_of_image_from_url():
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.29.74', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)

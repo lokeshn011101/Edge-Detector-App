@@ -13,8 +13,9 @@
         android:layout_height="wrap_content"
         android:text="Upload Image"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/viewimages"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line2" />
 
@@ -26,6 +27,7 @@
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/line2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/line1" />
 
@@ -36,6 +38,7 @@
         android:background="#656565"
         app:layout_constraintBottom_toTopOf="@id/camera_upload"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/url_upload_layout" />
 
@@ -53,11 +56,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/url_upload_layout"
         android:layout_width="408dp"
-        android:layout_height="175dp"
+        android:layout_height="135dp"
         app:layout_constraintBottom_toTopOf="@+id/line1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="50.0">
 
         <Button
             android:id="@+id/url_upload"
@@ -98,6 +103,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/viewimages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Edge Detected Images"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="viewEdgeDetectedImages"
+        app:layout_constraintTop_toBottomOf="@+id/gallery_upload" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
